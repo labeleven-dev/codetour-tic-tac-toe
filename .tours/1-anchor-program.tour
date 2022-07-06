@@ -23,7 +23,7 @@
     },
     {
       "file": "programs/tic-tac-toe/src/lib.rs",
-      "description": "### Program ID\n\nThe public key for the account, where the program is run, is hardcoded here.\n\nWhen the program starts, it checks to make sure the program is running out of the provided account.\n\n`Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS` is just a placeholder. Update it to the real program ID once you have one after `anchor deploy`.",
+      "description": "### Program ID\n\nThe public key for the account, where the program is run, is hardcoded here.\n\nWhen the program starts, it checks to make sure the program is running out of the provided account.\n\n`Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS` is just a placeholder. Update it to the real program ID that is generated during the build.",
       "line": 10,
       "selection": {
         "start": {
