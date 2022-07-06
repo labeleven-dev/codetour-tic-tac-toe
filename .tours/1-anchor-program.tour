@@ -1,0 +1,157 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "1. Anchor Program",
+  "nextTour": "2. Tic-Tac-Toe",
+  "steps": [
+    {
+      "title": "Introduction",
+      "description": "## Weclome to the code tour of Anchor's Tic-Tac-Toe program.\n\nIn this first tour, you will learn about the different parts that make an Anchor program.\n\n### Prerequisite knowledge\n\nIt is assumed you already understand the basics of Solana programs:\n\n* Accounts and programs\n* Transactions and instructions\n\nIf you are not familiar with these concepts, I recommend reviewing the \"Core Concepts\" section of the [Solana Cookbook](https://solanacookbook.com/).\n\n### Setup\n\nIt is not mandatory to run the program for the tour. But if you like to do so, please make sure your local development environment is set up with the required tooling. \n\nSee [Anchor Installation Guide](https://www.anchor-lang.com/docs/installation) for the steps.\n\n### Credits\n\nThis tour was created by Sohrab ([GitHub](https://github.com/sohrab-) | [Twitter](https://twitter.com/sohrabwashere) | [Blog](https://blog.labeleven.dev/)).\n\nThe code itself and much of the narrative come from the Anchor documentation:\n\n* Tutorial: <https://www.anchor-lang.com/docs/tic-tac-toe>\n* Code: <https://github.com/coral-xyz/anchor/tree/master/docs/programs/tic-tac-toe>\n\n"
+    },
+    {
+      "file": "programs/tic-tac-toe/src/lib.rs",
+      "selection": {
+        "start": {
+          "line": 12,
+          "character": 1
+        },
+        "end": {
+          "line": 24,
+          "character": 1
+        }
+      },
+      "description": "### Program\n\nEvery Anchor program starts with a module, annotated with `#[program]` macro.\n\nProgram macro goes through its own content and generates what is required to create a Solana program."
+    },
+    {
+      "file": "programs/tic-tac-toe/src/lib.rs",
+      "description": "### Program ID\n\nThe public key for the account, where the program is run, is hardcoded here.\n\nWhen the program starts, it checks to make sure the program is running out of the provided account.\n\n`Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS` is just a placeholder. Update it to the real program ID once you have one after `anchor deploy`.",
+      "line": 10,
+      "selection": {
+        "start": {
+          "line": 10,
+          "character": 14
+        },
+        "end": {
+          "line": 10,
+          "character": 58
+        }
+      }
+    },
+    {
+      "file": "programs/tic-tac-toe/src/lib.rs",
+      "selection": {
+        "start": {
+          "line": 16,
+          "character": 1
+        },
+        "end": {
+          "line": 19,
+          "character": 1
+        }
+      },
+      "description": "### Instruction\n\nEach method with a `Context` argument is an instruction that can be invoked.\n\nAnchor uses the first 8 bytes of instruction data to route the incoming instruction to the correct function."
+    },
+    {
+      "file": "programs/tic-tac-toe/src/lib.rs",
+      "selection": {
+        "start": {
+          "line": 16,
+          "character": 23
+        },
+        "end": {
+          "line": 16,
+          "character": 66
+        }
+      },
+      "description": "### Instruction Arguments\n\nEach instruction function can have the following arguments:\n\n* `Context` containing all the Accounts used by the instruction\n* Optionally, any data passed to the instruction\n\nAnchor handles the deserialisation and mapping of accounts and instruction data for you!"
+    },
+    {
+      "file": "programs/tic-tac-toe/src/instructions/setup_game.rs",
+      "description": "### Accounts\n\nAccounts, used in `Context` arguments, are defined as structs, annotated with `#[derive(Accounts)]`.\n\nAnchor deserialises this struct from an `AccountInfo` array, sent to the instruction.\n\nFirst 8 bytes of the Account data is used to store the account name hash so Anchor can easily map between the `AccountInfo` arrays and Accounts structs.",
+      "line": 10
+    },
+    {
+      "file": "programs/tic-tac-toe/src/instructions/setup_game.rs",
+      "description": "### Account Types\n\nThe field type can be made specific to the type of the Account so additional checks can be performed.\n\nFor example, for `system_program`, Anchor will automatically check that the Account is a `Program`, i.e. executable, and the Program ID matches that of the `System` program.\n\nIt is highly recommended to be as specific as possible with the field types, and hence the checks.\n\nHowever in some scenarios, they may need to be removed. In those times, `UncheckedAccount` (or even `AccountInfo`) may be used. \n\n```rust\n/// CHECK: <give the reason why no checks are being done>\npub system_program: UncheckedAccount<'info>,\n```\n\n(This is just an exmple. You do not need to insert this code into this program.)\n\n**Warning**: You have to perform all of your own checks now.",
+      "line": 16
+    },
+    {
+      "file": "programs/tic-tac-toe/src/instructions/setup_game.rs",
+      "description": "### Account Constraints\n\nIn addition to field types, `#[account(...)]` annotation allows for additional checks to be performed.\n\nHere are some major ones:\n\n* `mut`: Check that the Account has been marked as writable\n* `address`: Check that the Account has the given address\n* `owner`: Check that the Account has the given owner\n* `token::mint`: Check that the Token Account has the given mint\n* etc.\n\nYou can find the full list in [Anchor Rust documentation](https://docs.rs/anchor-lang/latest/anchor_lang/derive.Accounts.html).",
+      "line": 14
+    },
+    {
+      "file": "programs/tic-tac-toe/src/state/game.rs",
+      "description": "### Account Structs\n\n`#[account]` annotation has another use as well!\n\nProgram data can be serialised and stored in an Account's data. This data is serialised in a specific layout.\n\nThis layout can be defined in an Anchor program by annotating a struct with `#[account]` macro.\n\nThis allows Anchor to automatically deserialise the binary data to a user-friendly struct and vice versa.",
+      "line": 6
+    },
+    {
+      "file": "programs/tic-tac-toe/src/lib.rs",
+      "selection": {
+        "start": {
+          "line": 16,
+          "character": 71
+        },
+        "end": {
+          "line": 16,
+          "character": 81
+        }
+      },
+      "description": "### Result\n\nBack to the instruction!\n\nThis isn't `std::result::Result`! This is actually `anchor_lang:Result`, which is configured to throw `AnchorError` in case of errors.\n\nInstruction functions do not return any values."
+    },
+    {
+      "file": "programs/tic-tac-toe/src/lib.rs",
+      "description": "### Business Logic\n\nThe body of the function is where your business logic for your instruction goes.",
+      "line": 17
+    },
+    {
+      "file": "programs/tic-tac-toe/src/lib.rs",
+      "description": "### Prelude\n\nAll the Anchor bits and pieces that you need for your program are imported as part of the prelude.\n\nThis includes macros (`declare_id`, `#[program]`) and structs (`Context`, `Result`) that you see in this file.",
+      "line": 1
+    },
+    {
+      "file": "programs/tic-tac-toe/src/errors.rs",
+      "selection": {
+        "start": {
+          "line": 3,
+          "character": 1
+        },
+        "end": {
+          "line": 11,
+          "character": 1
+        }
+      },
+      "description": "### Errors\n\nAll custom errors that your program throws can be defined in an enum, annotated with `#[error_code]`.\n\nThe error code correspond to the enum's ordinal value. An error message can be set using `#[msg(\"...\")]` annotation on each enum value."
+    },
+    {
+      "file": "programs/tic-tac-toe/src/state/game.rs",
+      "description": "### Throwing Errors\n\nThe errors can be returned using the standard `Err()` enum.\n\nAlternatively, you can use `err!()` macro.",
+      "line": 50
+    },
+    {
+      "file": "Anchor.toml",
+      "description": "### Anchor.toml\n\nAnchor-specific configuration is stored in `Anchor.toml` at the root of the project.\n\nAmong other things, you can set:\n\n* Cluster and wallet to be used for tests or deployments\n* Additional accounts to be configured for the local test validator\n* The test script to be executed when running `anchor test`",
+      "line": 13
+    },
+    {
+      "file": "tests/tic-tac-toe.ts",
+      "description": "### Integration Tests\n\nSpeaking of tests, Anchor lets you run integration tests that deploys your program to a local validator and interacts with it via Typescript.\n\nIn addition to ease of use, Typescript is chosen to provide a different binding than Rust so we can catch any client-side discrepencies, that could become a security exploit.\n\nIt is possible to write these tests in any compatible language and update `Anchor.toml` to run the correct test script. That said, Typescript probably provides the least amount of friction and the best support for this purpose.",
+      "line": 1
+    },
+    {
+      "file": "tests/tic-tac-toe.ts",
+      "description": "### IDL\n\nAnchor generates an Interface Definition Language (IDL), during the build.\n\nThis describes the interface of the program and helps clients to call it correctly. ",
+      "line": 3
+    },
+    {
+      "file": "tests/tic-tac-toe.ts",
+      "description": "### Anchor for Typescript\n\nFor example, IDL lets you have a type-safe builder pattern like this.\n\nHere, the client SDK already knows the available methods, data and accounts required to call this program. Handy!",
+      "line": 44
+    },
+    {
+      "directory": "tests",
+      "description": "### Running the test\n\nLet's run the tests!\n\nFor this to work, you will need to have set up your local development environment with [the required tools](https://www.anchor-lang.com/docs/installation).\n\nIf this is first time running the tests, you probably need to install the Typescript dependencies (`anchor test` won't do this for you!).\n\n>> yarn install\n\nNow you're ready to do some integration tests!\n\n>> anchor test\n\nHere, Anchor will:\n\n1. Build the program into `target/deploy/tic_tac_toe.so` binary\n1. Start a local test validator\n1. Deploy the program\n1. Run the test script, specified in `Anchor.toml`.\n\nIn the terminal output, you should see the outcome of each test case and also the program logs from the validator.\n\n> If you get the error `Error: Unable to read keypair file`, you likely need to generate a Solana keypair using `solana-keygen new`."
+    }
+  ],
+  "ref": "main",
+  "isPrimary": true
+}
