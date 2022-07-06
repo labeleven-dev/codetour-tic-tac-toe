@@ -1,1 +1,3 @@
-yarn install before anchor test
+Code Tour: Anchor Tic-Tac-Toe
+===
+

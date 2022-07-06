@@ -1,0 +1,7 @@
+{
+  "recommendations": [
+    "vsls-contrib.codetour",
+    "rust-lang.rust-analyzer",
+    "bungcip.better-toml",
+  ]
+}
