@@ -4,7 +4,7 @@ Code Tour: Anchor Tic-Tac-Toe
 Run in browser
 ---
 
-1. Go to <https://github.dev/labeleven-dev/anchor-tic-tac-toe>
+1. Go to <https://github.dev/labeleven-dev/codetour-tic-tac-toe>
 1. Once loaded, it will prompt to install "CodeTour" extension. Do it!
     * If the prompt doesn't come, just install it as you do any other extensions
 1. `Cmd+P` or `Ctrl+P` and run "CodeTour: Start Tour"
