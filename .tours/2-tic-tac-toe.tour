@@ -4,7 +4,7 @@
   "steps": [
     {
       "title": "Introduction",
-      "description": "### Introduction\n\nNow that you have found your way around an Anchor program, let's look at how a [Tic-Tac-Toe game](https://en.wikipedia.org/wiki/Tic-tac-toe) can be modelled as a program.\n\n_This tour will more or less follow the narrative in [Anchor documentation tutorial](https://www.anchor-lang.com/docs/tic-tac-toe)._\n\nFor this program, we will have 2 instructions:\n\n1. Setup Game: Create the game board and capture who is playing the game\n1. Play: Each player's turn playing the game\n\n> Remember to take breaks. You can always resume a tour later."
+      "description": "### Introduction\n\nNow that you have found your way around an Anchor program, let's look at how a [Tic-Tac-Toe game](https://en.wikipedia.org/wiki/Tic-tac-toe) can be modelled as a program.\n\n_This tour will more or less follow the narrative in the [Anchor documentation tutorial](https://www.anchor-lang.com/docs/tic-tac-toe)._\n\nFor this program, we will have 2 instructions:\n\n1. Setup Game: Create the game board and capture who is playing the game\n1. Play: Each player's turn playing the game\n\n> Remember to take breaks. You can always resume a tour later."
     },
     {
       "file": "programs/tic-tac-toe/src/state/game.rs",
@@ -18,11 +18,11 @@
           "character": 2
         }
       },
-      "description": "### Game Setup: State (1)\n\nFirst, we need to think about what data we want to store for the game.\n\n* The players (accounts)\n* Whose turn is it\n* The game board\n* The current state of the game, i.e. game in progress, player 1 won, etc.\n\nSince Solana programs are stateless, these need to be stored in a separate account.\n\nTo create a new account, we also need to work out how many bytes does the account need. You can see this calculation in the comments next to each field. See the [Space](https://www.anchor-lang.com/docs/space) reference guide from Anchor documentation for more info."
+      "description": "### Game Setup: State (1)\n\nFirst, we need to think about what data we want to store for the game.\n\n* The players (accounts)\n* Whose turn is it\n* The game board\n* The current state of the game, i.e. game in progress, player 1 won, etc.\n\nSince Solana programs are stateless, these need to be stored in a separate account.\n\nTo create a new account, we also need to work out how many bytes the account need. You can see this calculation in the comments next to each field. See the [Space](https://www.anchor-lang.com/docs/space) reference guide from Anchor documentation for more info."
     },
     {
       "file": "programs/tic-tac-toe/src/state/game.rs",
-      "description": "### Game Setup: State (2)\n\nYou may have noticed in the `Game` struct, we had a few custom types. These are defined as enums with a bunch of traits. \n\nOf note are `AnchorSerialize` and `AnchorDeserialize`. These implement the Borsh (de)serialisation of these types. All types used in `#[account]` structs must implement these traits. \n\nOther intersting ones are `FromPrimitive` and `ToPrimitive`, that help derieve a value for each enum value. We added a couple of dependencies to [Cargo.toml](./programs/tic-tac-toe/Cargo.toml) to enable these.",
+      "description": "### Game Setup: State (2)\n\nYou may have noticed in the `Game` struct, we had a few custom types. These are defined as enums with a bunch of traits. \n\nOf note are `AnchorSerialize` and `AnchorDeserialize`. These implement the Borsh (de)serialisation of these types. All types used in `#[account]` structs must implement these traits. \n\nOther interesting ones are `FromPrimitive` and `ToPrimitive`, which help derive a value for each enum value. We added a couple of dependencies to [Cargo.toml](./programs/tic-tac-toe/Cargo.toml) to enable these.",
       "selection": {
         "start": {
           "line": 114,
@@ -36,7 +36,7 @@
     },
     {
       "file": "programs/tic-tac-toe/src/state/game.rs",
-      "description": "### Game Setup: State (3)\n\nNow, we are ready to add the game logic!\n\nThis is just plain Rust code so we won't examine it too closely.\n\nPlease review it briefly to understand what each function does.",
+      "description": "### Game Setup: State (3)\n\nNow, we are ready to add the game logic!\n\nThis is just plain Rust code so we won't examine it too closely.\n\nPlease review it to understand what each function does at a high level.",
       "line": 14
     },
     {
@@ -56,12 +56,12 @@
     },
     {
       "file": "programs/tic-tac-toe/src/instructions/setup_game.rs",
-      "description": "### Game Setup: Instruction (3)\n\nIf you try to only specify `init`, Rust compiler would complain that we need to add a `payer`.\n\nSince `init` creates \"rent-exempt\" accounts, the account need to have some SOL in it. So we need to identity a payer to transfer these funds from.\n\n> An account should have at least 2 year's worth of rent stored in them, to make them \"rent-exempt\".\n\nIn order for someone to pay, they will need to sign the transaction. \n\nLet's say we want to make Player 1 to pay the rent, so Player 1 is defined as a signer and identified in `game` account's annotation as the `payer.",
+      "description": "### Game Setup: Instruction (3)\n\nIf you try to only specify `init`, the Rust compiler would complain that we need to add a `payer`.\n\nSince `init` creates \"rent-exempt\" accounts, the account needs to have some SOL in it. So we need to identify a payer to transfer these funds from.\n\n> An account should have at least 2 years' worth of rent stored in them, to make them \"rent-exempt\".\n\nFor someone to pay, they will need to sign the transaction. \n\nLet's say we want to make Player 1 pay the rent, so Player 1 is defined as a signer and identified in the `game` account's annotation as the `payer.",
       "line": 15
     },
     {
       "file": "programs/tic-tac-toe/src/instructions/setup_game.rs",
-      "description": "### Game Setup: Instruction (4)\n\nWe still have a problem. \n\nWe need to create a new account. Only System native program can do this. \n\nOur program can only interact with accounts/programs that were passed into it. So we have to also pass in the System program.",
+      "description": "### Game Setup: Instruction (4)\n\nWe still have a problem. \n\nWe need to create a new account. Only the native System program can do this. \n\nOur program can only interact with accounts/programs that were passed into it. So we have to also pass in the System program.",
       "line": 16
     },
     {
@@ -76,21 +76,21 @@
           "character": 71
         }
       },
-      "description": "### Game Setup: Instruction (5)\n\nOne last thing! (I swear!)\n\nTo create a new account, we need to also tell the System program how much space to allocate it. Do you remember the comments on `Game` struct where we did this calculation?\n\nWe add another 8 bytes to account for the account discriminator hash that Anchor adds.\n\nThis is specified using the `space` constraint, alongside `init` and `payer`."
+      "description": "### Game Setup: Instruction (5)\n\nOne last thing! (I swear!)\n\nTo create a new account, we need to also tell the System program how much space to allocate it. Do you remember the comments on the `Game` struct where we did this calculation?\n\nWe add another 8 bytes to account for the account discriminator hash that Anchor adds.\n\nThis is specified using the `space` constraint, alongside `init` and `payer`."
     },
     {
       "file": "programs/tic-tac-toe/src/lib.rs",
-      "description": "### Game Setup: Instruction (6)\n\nWe finally can add the instruction function!\n\nWe will pass int the Accounts struct we just made, `SetupGame`, as part of the `Context`. \n\nWe also pass the public key for the Player 2. Since we are not _doing_ anything with this Account, besides storing it in the game state, it can be passed as an argument, rather than in `SetupGame` struct. \n\nIt also saves some instruction space, and not to mention avoids Solana runtime trying to fetch it for the `setup_game` instruction. ",
+      "description": "### Game Setup: Instruction (6)\n\nWe finally can add the instruction function!\n\nWe will pass it the Accounts struct we just made, `SetupGame`, as part of the `Context`. \n\nWe also pass the public key for Player 2. Since we are not _doing_ anything with this Account, besides storing it in the game state, it can be passed as an argument, rather than in `SetupGame` struct. \n\nIt also saves some instruction space, not to mention avoids Solana runtime trying to fetch it for the `setup_game` instruction. ",
       "line": 16
     },
     {
       "file": "programs/tic-tac-toe/src/lib.rs",
-      "description": "### Game Setup: Instruction (7)\n\nWe already implemented the game logic in `instructions` module, so here we simply call it and pass in the arguments.\n\nAt this point, let's do a build:\n\n>> anchor build\n\nOnce it finishes successfully, it would have generated an IDL file, `target/idl/tic_tac_toe.json`. Please open it and review its content.",
+      "description": "### Game Setup: Instruction (7)\n\nWe already implemented the game logic in the `instructions` module, so here we simply call it and pass in the arguments.\n\nAt this point, let's do a build:\n\n>> anchor build\n\nOnce it finishes successfully, it would have generated an IDL file, `target/idl/tic_tac_toe.json`. Please open it and review its content.",
       "line": 17
     },
     {
       "file": "tests/tic-tac-toe.ts",
-      "description": "### Game Setup: Test (1)\n\nThat generated IDL is used to dynamically create a Typescript client for our program. We can use this client to test our code!\n\nHere we are writting the code in `mocha`, a JavaScript unit testing library.",
+      "description": "### Game Setup: Test (1)\n\nThat generated IDL is used to dynamically create a Typescript client for our program. We can use this client to test our code!\n\nHere we are writing the code in `mocha`, a JavaScript unit testing library.",
       "line": 40
     },
     {
@@ -105,7 +105,7 @@
           "character": 54
         }
       },
-      "description": "### Game Setup: Test (2)\n\nFirst, we need to create some key pairs, representing the various accounts we are working with.\n\nSince `playerOne` is paying (and signing) for the transaction, we set its keypair to our program wallet. You may remember, the wallet is configured in `Anchor.toml` file."
+      "description": "### Game Setup: Test (2)\n\nFirst, we need to create some key pairs, representing the various accounts we are working with.\n\nSince `playerOne` is paying (and signing) for the transaction, we set its keypair to our program wallet. You may remember that the wallet is configured in `Anchor.toml` file."
     },
     {
       "file": "tests/tic-tac-toe.ts",
@@ -119,7 +119,7 @@
           "character": 38
         }
       },
-      "description": "### Game Setup: Test (3)\n\nNow we're ready to call the program!\n\nThe IDL has made things very easy. `setupGame` appears as one of the methods and it knows about the `playerTwo` public key argument alreeady."
+      "description": "### Game Setup: Test (3)\n\nNow we're ready to call the program!\n\nThe IDL has made things very easy. `setupGame` appears as one of the methods and it knows about the `playerTwo` public key argument already."
     },
     {
       "file": "tests/tic-tac-toe.ts",
@@ -142,7 +142,7 @@
     },
     {
       "file": "tests/tic-tac-toe.ts",
-      "description": "### Game Setup: Test (6)\n\nOnce we send the transaction, we can retrieve the game state account using `program.account` helper and assert some conditions on it.\n\nThis is probably a good time to run the test again:\n\n>> anchor test\n\nAnchor CLI only prints out the failing program invocation logs on the terminal. Head over to `.anchor/program-logs` directoy and you should be able to see the logs for this test case, at the top of the log file.",
+      "description": "### Game Setup: Test (6)\n\nOnce we send the transaction, we can retrieve the game state account using `program.account` helper and assert some conditions on it.\n\nThis is probably a good time to run the test again:\n\n>> anchor test\n\nAnchor CLI only prints out the failing program invocation logs on the terminal. Head over to `.anchor/program-logs` directory and you should be able to see the logs for this test case, at the top of the log file.",
       "line": 53
     },
     {
